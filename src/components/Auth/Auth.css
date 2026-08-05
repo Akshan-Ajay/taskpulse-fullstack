@@ -1,0 +1,237 @@
+/* Split Layout Container */
+/* Split Layout Container - Full screen split, integrated feel */
+.auth-split-wrapper {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  background-color: #f1e9f7; /* Very light lavender from image 6 */
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent scrolling if possible */
+}
+
+/* Left Side: Branding Hero Section */
+.auth-brand-side {
+  flex: 1;
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 40%, #d8b4fe 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating decorative light rings */
+.auth-brand-side::before {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(
+    circle,
+    rgba(167, 139, 250, 0.35) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  top: 10%;
+  left: 10%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.brand-hero-content {
+  max-width: 440px;
+  text-align: center;
+  z-index: 1;
+}
+
+.brand-hero-logo {
+  width: 240px;
+  height: 240px;
+
+  /* Zoom out the inner image so nothing gets cut off */
+  object-fit: contain;
+  padding: 20px; /* Adjust this number to zoom in/out (higher = more zoomed out) */
+  box-sizing: border-box;
+
+  /* Seamless purple background matching the logo's native backdrop */
+  background: #d8b4fe;
+  border-radius: 50%;
+
+  /* Circular border frame */
+  border: 4px solid #6e4fa2;
+
+  /* Soft outer elevation shadow */
+  box-shadow: 0 12px 28px rgba(76, 29, 149, 0.2);
+
+  margin-bottom: 30px;
+}
+
+.brand-hero-logo:hover {
+  transform: translateY(-5px); /* Lift slightly on hover */
+  box-shadow:
+    inset 0 0 15px rgba(124, 58, 237, 0.1),
+    0 12px 40px rgba(109, 40, 217, 0.3);
+}
+
+.brand-hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #4c1d95; /* Dark purple from image 6 */
+  margin: 0 0 16px 0;
+  letter-spacing: -1px;
+}
+
+.brand-hero-tagline {
+  font-size: 1.05rem;
+  color: #5b21b6;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Right Side: Form Container, Integrated (No White Box) */
+.auth-form-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: transparent; /* Seamless with parent */
+}
+
+/* Updated form structure to remove 'card' look */
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 0; /* Remove internal padding */
+  background: transparent; /* Make transparent */
+  border: none; /* Remove border */
+  box-shadow: none; /* Remove shadow */
+  box-sizing: border-box;
+}
+
+.auth-card h2 {
+  margin: 0 0 8px 0;
+  color: #4c1d95;
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.auth-subtitle {
+  color: #8b5cf6;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+  font-weight: 500;
+}
+
+/* Form Group Controls */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #5b21b6;
+}
+
+.form-group input {
+  padding: 12px 16px;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background-color: #faf8f5;
+  color: #4c1d95;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: #a78bfa;
+}
+
+.form-group input:focus {
+  border-color: #7c3aed;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+}
+
+/* Primary Action Button */
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 8px 20px rgba(109, 40, 217, 0.25);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+  box-shadow: 0 10px 24px rgba(91, 33, 182, 0.35);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Error Banner */
+.error-message {
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}
+
+/* Switch Toggle Links */
+.auth-toggle {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6d28d9;
+}
+
+.link-text {
+  color: #7c3aed;
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.link-text:hover {
+  color: #4c1d95;
+}
+
+/* Responsive side-by-side collapse on mobile */
+@media (max-width: 860px) {
+  .auth-split-wrapper {
+    flex-direction: column;
+  }
+  .auth-brand-side {
+    padding: 40px 20px;
+  }
+  .brand-hero-logo {
+    width: 180px;
+  }
+}
