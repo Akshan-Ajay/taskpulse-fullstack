@@ -1,4 +1,4 @@
-/* Base Global Resets */
+/* Base Layout Fixes */
 body, html, #root {
   margin: 0;
   padding: 0;
@@ -7,19 +7,16 @@ body, html, #root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Navbar Wrapper - Spans Full Width with Proper Side Padding */
+/* Deep Purple Navbar (Exactly matching your image background) */
 .navbar {
-  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 50%, #d8b4fe 100%);
-  padding: 0.75rem 2rem; /* Added horizontal padding back so elements don't hit screen edges */
-  box-shadow: 0 4px 20px rgba(76, 29, 149, 0.12);
-  border-bottom: 2px solid rgba(110, 79, 162, 0.15);
+  background-color: #25103c;
+  padding: 0.6rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   width: 100%;
-  box-sizing: border-box; /* Prevents horizontal overflow */
+  box-sizing: border-box;
 }
 
 .navbar-content {
@@ -27,245 +24,303 @@ body, html, #root {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 0 auto;
 }
 
-/* LEFT SECTION: Logo & Primary Nav Links */
+/* LEFT SIDE: Brand & Team Settings */
 .navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* App Logo: Squircle container matching the image */
+.navbar-brand .logo-img {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 2px;
+}
+
+.brand-name {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.3px;
+}
+
+/* Subtle separator line between brand and project info */
+.workspace-divider {
+  width: 1px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.15);
+  margin: 0 1.2rem;
+}
+
+/* Workspace details setup */
+.workspace-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  cursor: pointer;
+}
+
+.workspace-badge {
+  background-color: #8b5cf6;
+  color: #ffffff;
+  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.workspace-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.workspace-title {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chevron-down {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.workspace-status {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.78rem;
+  margin-top: 1px;
+}
+
+/* RIGHT SIDE: Navigation menu wrappers */
+.navbar-menu-wrapper {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-/* RIGHT SECTION: Logout / Auth Action Buttons */
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Logo Container & Image - Fixed Cut-off Issue */
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px; /* Breathing room for box-shadow & borders */
-}
-
-.navbar-logo .logo-img {
-  height: 72px;
-  width: 72px;
-  object-fit: contain;
-  padding: 3px;
-  box-sizing: border-box;
-  background: #d8b4fe;
-  border-radius: 50%;
-  border: 2.5px solid #6e4fa2;
-  box-shadow: 0 4px 12px rgba(76, 29, 149, 0.2);
-  display: block;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.navbar-logo .logo-img:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 
-    inset 0 0 10px rgba(124, 58, 237, 0.1),
-    0 6px 16px rgba(109, 40, 217, 0.3);
-}
-
-/* Navigation Links Container */
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 1.2rem;
 }
 
-/* Base Link Items */
-.nav-item {
-  position: relative;
-  color: #5b21b6;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.98rem;
-  letter-spacing: 0.2px;
-  transition: all 0.2s ease;
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Nav links styling */
+.nav-item-link {
+  color: rgba(255, 255, 255, 0.8);
   background: none;
   border: none;
+  font-weight: 600;
+  font-size: 0.92rem;
   cursor: pointer;
-  font-family: inherit;
-  padding: 0.3rem 0;
+  padding: 0.4rem 0.6rem;
+  transition: color 0.2s;
 }
 
-.nav-item:hover {
-  color: #4c1d95;
+.nav-item-link:hover {
+  color: #ffffff;
 }
 
-/* Active Underline Effect */
-a.nav-item::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  width: 0;
-  height: 2.5px;
-  background: #7c3aed;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
+.logout-link {
+  color: #f87171;
+}
+.logout-link:hover {
+  color: #ef4444;
 }
 
-a.nav-item:hover::after {
-  width: 100%;
+/* Overlapping Avatars Group styling */
+.avatar-group {
+  display: flex;
+  align-items: center;
+  margin-right: 0.4rem;
 }
 
-/* "+ New Task" Action Button */
-.nav-btn {
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #5b21b6 100%);
-  padding: 0.55rem 1.3rem;
-  border-radius: 10px;
-  border: none;
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #25103c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
   font-weight: 700;
   color: #ffffff;
-  box-shadow: 0 6px 16px rgba(109, 40, 217, 0.25);
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  margin-left: -8px; 
+  position: relative;
 }
 
-.nav-btn:hover {
-  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
-  box-shadow: 0 8px 20px rgba(91, 33, 182, 0.35);
-  transform: translateY(-1px);
+.avatar:first-child {
+  margin-left: 0;
+}
+
+/* Avatar palette variants mimicking image colors */
+.color-1 { background-color: #818cf8; }
+.color-2 { background-color: #f97316; }
+.color-3 { background-color: #10b981; }
+.color-4 { background-color: #3b82f6; }
+
+.status-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 7px;
+  height: 7px;
+  background-color: #22c55e;
+  border: 1.5px solid #25103c;
+  border-radius: 50%;
+}
+
+/* Custom Outlined Action Icon Buttons */
+.icon-btn {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
   color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.nav-btn:active {
+/* "+ Create task" Button */
+.nav-btn-primary {
+  background-color: #7c3aed;
+  color: #ffffff;
+  padding: 0.55rem 1.1rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.nav-btn-primary span {
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.nav-btn-primary:hover {
+  background-color: #6d28d9;
+}
+
+.nav-btn-primary:active {
   transform: scale(0.98);
 }
 
-/* Logout Button Styling */
-.nav-auth-btn {
-  background: #fee2e2;
-  color: #991b1b;
-  padding: 0.55rem 1.2rem;
-  border-radius: 10px;
-  border: 1px solid #fca5a5;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(153, 27, 27, 0.1);
-  transition: all 0.2s ease;
+.auth-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.nav-auth-btn:hover {
-  background: #fecaca;
-  color: #7f1d1d;
-  box-shadow: 0 6px 16px rgba(153, 27, 27, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Login & Register Link Styling */
-.nav-auth {
-  font-weight: 700;
-  background-color: rgba(255, 255, 255, 0.6);
-  padding: 0.5rem 1.1rem;
-  border-radius: 8px;
-  border: 1.5px solid #c4b5fd;
-  color: #4c1d95;
-}
-
-.nav-auth:hover {
-  background-color: #ffffff;
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-  color: #4c1d95;
-}
-
-/* Mobile Responsive Adjustments */
-.navbar-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.navbar-toggle .bar {
-  width: 24px;
-  height: 3px;
-  background-color: #4c1d95;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-@media (max-width: 860px) {
-  .navbar-toggle {
-    display: flex;
-  }
-
-  .navbar-links {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 60%, #d8b4fe 100%);
-    padding: 1.5rem 0;
-    gap: 1.2rem;
-    box-shadow: 0 12px 24px rgba(76, 29, 149, 0.2);
-    border-top: 1px solid rgba(110, 79, 162, 0.15);
-  }
-
-  .navbar-links.active {
-    display: flex;
-  }
-}
-
-
-/* Search Banner Overlay */
+/* ==========================================================================
+   NEW & IMPROVED: Dark Theme Search Banner Overlay
+   ========================================================================== */
 .search-banner {
-  background: #ffffff;
-  padding: 12px 2rem;
+  background: #1e0b30;
+  padding: 14px 2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid #c4b5fd;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid #4c1d95;
   animation: slideDown 0.2s ease-out;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .search-banner input {
   flex: 1;
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: 1.5px solid #c4b5fd;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background-color: #2b1446;
   font-size: 0.95rem;
   outline: none;
-  color: #4c1d95;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.search-banner input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .search-banner input:focus {
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  border-color: #8b5cf6;
+  background-color: #341854;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
 }
 
 .search-close-btn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  color: #6d28d9;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  font-weight: bold;
+  transition: all 0.2s;
 }
 
-/* Modal Popup Overlay */
+.search-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   NEW & IMPROVED: Dark Theme Calendar Modal
+   ========================================================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -273,13 +328,15 @@ a.nav-item:hover::after {
 }
 
 .calendar-modal {
-  background: #ffffff;
+  background: #1e0b30;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 24px;
   width: 90%;
-  max-width: 480px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-  color: #4c1d95;
+  max-width: 440px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  animation: fadeIn 0.25s ease-out;
 }
 
 .modal-header {
@@ -289,41 +346,129 @@ a.nav-item:hover::after {
   margin-bottom: 20px;
 }
 
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
 .close-btn {
-  background: #f3e8ff;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   width: 32px;
   height: 32px;
-  color: #6d28d9;
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
 }
 
 .demo-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  gap: 6px;
   text-align: center;
 }
 
 .cal-head {
   font-weight: 700;
-  font-size: 0.85rem;
-  color: #7c3aed;
-  padding-bottom: 6px;
+  font-size: 0.82rem;
+  color: #a78bfa;
+  padding-bottom: 8px;
 }
 
 .cal-day {
-  padding: 10px;
-  background: #fdfbf7;
-  border-radius: 6px;
+  padding: 10px 0;
+  background: #2b1446;
+  border-radius: 8px;
   font-size: 0.85rem;
-  color: #3b0764;
-  border: 1px solid #e9d5ff;
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.15s ease;
+  cursor: pointer;
 }
 
+.cal-day:hover {
+  background: #7c3aed;
+  color: #ffffff;
+  border-color: #a78bfa;
+}
+
+/* Animations */
 @keyframes slideDown {
   from { transform: translateY(-100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   Mobile Responsive Setup
+   ========================================================================== */
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar-toggle .bar {
+  width: 22px;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 2px;
+}
+
+@media (max-width: 990px) {
+  .navbar-toggle {
+    display: flex;
+  }
+
+  .navbar-menu-wrapper {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #25103c;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+  }
+
+  .navbar-menu-wrapper.active {
+    display: flex;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .navbar-right {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 }
