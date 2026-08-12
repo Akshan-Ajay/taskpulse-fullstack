@@ -1,27 +1,29 @@
-# TaskPulse
+# TaskPulse — Navbar + Board & Columns
 
-Real-time collaborative Kanban board — the **Board & Columns** slice.
+## What's new in this build
 
-## What's in this build
+The navbar (matching the layout in your screenshot) is now fully wired up:
 
-- Three status columns (To Do / Doing / Done)
-- **Drag and drop** — move a task between columns or reorder it within a
-  column (`@hello-pangea/dnd`)
-- **Priority color coding** on every card — Low = green, Medium = yellow,
-  High = red, Urgent = dark red
-- **Multiple boards** — click the letter icon in the top bar to switch
-  between boards (mock: Web Team / Marketing Q3 / Mobile Launch)
-- **Dark mode** toggle
-- **Page background picker** — presets (solid / aurora / dot grid / mesh
-  glow) plus **upload your own photo** from your device as the background
-- Full-bleed layout — no page-chrome sitting in a corner
+1. **Board switcher** — click "Sprint 8 — Web Team" to see and switch
+   between your boards (mock: Web Team / Marketing Q3 / Mobile Launch).
+2. **Calendar** — click the Calendar link for a mock month view. Each day
+   with a task due gets a colored dot: green = Low, yellow = Medium,
+   red = High, dark red = Urgent. Legend at the bottom of the popover.
+3. **Search** — click Search, type anything. It searches task titles,
+   tags, and board names across every board at once, grouped by type.
+4. **Shared with** — click the avatar cluster to see everyone this board
+   is shared with, their email, and their role (Owner/Editor/Viewer).
+5. **Background changer** — the image icon next to the avatars opens the
+   same background picker as before: 4 presets, plus upload your own
+   photo from your device.
+6. **Dark/light toggle** — the moon/sun icon.
+7. **Navbar color follows the theme** — it's not one hardcoded color;
+   `--topbar` / `--topbar-text` are theme tokens in `src/index.css`, so
+   the navbar shifts between a deep purple (light mode) and near-black
+   purple (dark mode) automatically.
 
-This slice does **not** include the Create Task or Task Detail pages —
-those are being built by teammates. The "Create task" button, "Add a
-task" links, and the small arrow icon on each card are plain links to
-`/tasks/new` and `/tasks/:id` — they'll open your teammates' pages once
-everything is merged into one app. They won't render anything in this
-project on their own.
+Login/Register are plain styled buttons with no logic behind them —
+that's still a teammate's part.
 
 ## Requirements
 
@@ -34,47 +36,42 @@ npm install
 npm run dev
 ```
 
-Open the printed URL (usually `http://localhost:5173`).
-
-```bash
-npm run build     # production build -> dist/
-npm run preview   # preview the production build
-npm run lint       # oxlint
-```
-
 ## Project structure
 
 ```
 src/
   main.jsx
-  App.jsx                    # theme state (dark mode, background incl. custom upload)
-  App.css                    # all component styles
-  index.css                  # design tokens + background variants
+  App.jsx                 # renders Navbar + Board, owns theme/background state
+  App.css
+  index.css                # design tokens, incl. --topbar / --topbar-text per theme
   assets/
-    logo.png                  # TaskPulse logo
+    logo.png
   context/
-    TasksContext.jsx           # tasks + current board + drag-and-drop reordering
+    TasksContext.jsx        # tasks (all + current board), board switching, drag reorder
   data/
-    mockData.js                 # mock tasks, boards, teammates, priority colors
+    mockData.js              # tasks, boards, board membership/roles, tags, priority colors
   components/
-    Topbar.jsx                   # branding, board switcher, presence, theme controls
-    Board.jsx                     # DragDropContext + renders the 3 columns
-    Column.jsx                     # Droppable column
-    TaskCard.jsx                    # Draggable card w/ priority badge + open icon
+    Navbar.jsx                # board switcher, calendar, search, shared-with, bg, theme
+    Board.jsx                  # DragDropContext + renders the 3 columns
+    Column.jsx                  # Droppable column
+    TaskCard.jsx                 # Draggable card w/ priority badge + open icon
 ```
 
-## A note on colors
+## A note on the mock data
 
-The `App.css` you shared earlier didn't actually have color variables in
-it — it was leftover default Vite template CSS, no `:root { --accent: ... }`
-block. The palette here was sampled directly from your screenshots instead
-(lavender background, white cards, `#8B52C3` purple). Everything's
-centralized in `src/index.css` if you get a real theme file to swap in.
+Everything (tasks, boards, who's shared on which board, roles) lives in
+`src/data/mockData.js` and `boardMembers` in the same file. When there's
+a real backend, the shapes there are what a `GET /api/boards`,
+`GET /api/tasks`, and `GET /api/boards/:id/members` response should
+roughly match, so swapping them for `fetch()` calls should be
+straightforward.
 
-## Wiring this to the real backend later
+## Merging with your teammate's work
 
-`TasksContext.jsx`'s `moveTask` is the one function that talks to task
-state. When the backend is ready, it becomes a
-`PATCH /api/tasks/:id { status, position }` call instead of an in-memory
-array splice — nothing in `Board.jsx`, `Column.jsx`, or `TaskCard.jsx`
-needs to change shape-wise.
+If your friend already has a working `Navbar` in the shared repo with
+Login/Register logic wired up, don't just overwrite their file — open
+both versions side by side and combine: keep their auth logic, bring in
+the board switcher / calendar / search / shared-with / background pieces
+from this one. The panel logic in `Navbar.jsx` is self-contained (all in
+one file, one `openPanel` state) specifically so it's easy to lift into
+whatever navbar shell already exists.
