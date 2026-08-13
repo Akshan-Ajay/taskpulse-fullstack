@@ -3,14 +3,14 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
-// 1. Import the event listener and the new overlay component
+// Import the event listener and the new overlay component
 import './eventRouter'; 
 import TaskOverlayApp from './components/TaskOverlayApp.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
-    {/* 2. Inject the custom workspace overlay pages */}
+    {/* Inject the custom workspace overlay pages */}
     <TaskOverlayApp />
   </StrictMode>,
 )
