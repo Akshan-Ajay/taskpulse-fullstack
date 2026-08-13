@@ -9,9 +9,16 @@
   align-items: center;
   gap: 18px;
   padding: 12px 24px;
-  background: var(--topbar);
-  color: var(--topbar-text);
+  
+  /* A muted, smokey dark lavender look */
+  background: linear-gradient(135deg, #c4b5fd 0%, #6d28d9 60%, #3b0764 100%);
+  
+  /* Bright pale-purple text for perfect readability */
+  color: #faf8f5;
+  
   transition: background 0.3s ease;
+  
+  border-bottom: 1px solid rgba(59, 7, 100, 0.4);
 }
 
 .brand {
