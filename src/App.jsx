@@ -1,20 +1,59 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
+import Board from "./components/Board";
 import LoginForm from "./components/Auth/LoginForm";
 import RegisterForm from "./components/Auth/RegisterForm";
-import Navbar from "./components/Navbar";
+import { TasksProvider } from "./context/TasksContext";
 import logoImg from "./assets/logo.png";
+
+// Import your original working stylesheets
 import "./components/Auth/Auth.css";
-import "./components/Navbar.css";
+import "./App.css";
 
 export default function App() {
+  // Navigation State: 'dashboard', 'login', or 'register'
   const [currentView, setCurrentView] = useState("dashboard");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
-  // States for Calendar Modal and Search Bar Overlay
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [showSearchBar, setShowSearchBar] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  // Shell themes & background preferences
+  const [isDark, setIsDark] = useState(
+    () => localStorage.getItem("taskpulse-theme") === "dark"
+  );
+  const [bg, setBg] = useState(
+    () => localStorage.getItem("taskpulse-bg") || "aurora"
+  );
+  const [customBgUrl, setCustomBgUrl] = useState(
+    () => localStorage.getItem("taskpulse-bg-custom") || null
+  );
+
+  // --- GLOBAL CLICK INTERCEPTOR FOR DYNAMIC NAVBAR INTERFACES ---
+  useEffect(() => {
+    function handleGlobalClick(e) {
+      const target = e.target.closest("button");
+      if (!target) return;
+
+      const buttonText = target.textContent?.trim();
+      if (buttonText === "Login") {
+        e.preventDefault();
+        setCurrentView("login");
+      } else if (buttonText === "Register") {
+        e.preventDefault();
+        setCurrentView("register");
+      }
+    }
+
+    document.addEventListener("click", handleGlobalClick);
+    return () => document.removeEventListener("click", handleGlobalClick);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("taskpulse-theme", isDark ? "dark" : "light");
+  }, [isDark]);
+
+  useEffect(() => {
+    localStorage.setItem("taskpulse-bg", bg);
+  }, [bg]);
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
@@ -28,75 +67,57 @@ export default function App() {
     setCurrentView("dashboard");
   };
 
-  const handleNewTaskClick = () => {
-    console.log("New Task button clicked!");
-  };
+  function handleUploadBg(dataUrl) {
+    setCustomBgUrl(dataUrl);
+    setBg("custom");
+    try {
+      localStorage.setItem("taskpulse-bg-custom", dataUrl);
+    } catch {
+      // image too large for localStorage
+    }
+  }
+
+  const customStyle =
+    bg === "custom" && customBgUrl
+      ? {
+          backgroundImage: `url(${customBgUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+        }
+      : undefined;
 
   // ----------------------------------------------------
-  // 1. DASHBOARD VIEW
+  // 1. DASHBOARD / KANBAN BOARD VIEW
   // ----------------------------------------------------
   if (currentView === "dashboard") {
     return (
-      <div className="app-dashboard-layout">
-        <Navbar 
-          isLoggedIn={isLoggedIn}
-          onLogout={handleLogout}
-          onNewTaskClick={handleNewTaskClick}
-          onLoginClick={() => setCurrentView("login")}
-          onRegisterClick={() => setCurrentView("register")}
-          onCalendarClick={() => setShowCalendar(true)}
-          onSearchClick={() => setShowSearchBar(!showSearchBar)}
-        />
-
-        {/* Dropdown Search Bar */}
-        {showSearchBar && (
-          <div className="search-banner">
-            <input 
-              type="text" 
-              placeholder="Search tasks, projects, or tags..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-            />
-            <button className="search-close-btn" onClick={() => setShowSearchBar(false)}>✕</button>
-          </div>
-        )}
-        
-        {/* Main Dashboard Content Area */}
-        <main style={{ padding: "30px", color: "#ffffff" }}>
-          <h2>Welcome to TaskPulse Dashboard!</h2>
-          {isLoggedIn ? (
-            <p>Logged in as: <strong>{user?.email}</strong></p>
-          ) : (
-            <p>Please click <strong>Login</strong> or <strong>Register</strong> in the navbar to get started.</p>
-          )}
-        </main>
-
-        {/* Calendar Modal */}
-        {showCalendar && (
-          <div className="modal-overlay" onClick={() => setShowCalendar(false)}>
-            <div className="calendar-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3>📅 TaskPulse Calendar</h3>
-                <button className="close-btn" onClick={() => setShowCalendar(false)}>✕</button>
-              </div>
-              <div className="demo-calendar-grid">
-                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-                  <div key={day} className="cal-head">{day}</div>
-                ))}
-                {Array.from({ length: 31 }).map((_, i) => (
-                  <div key={i} className="cal-day">{i + 1}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      <TasksProvider>
+        <div
+          className="app-shell"
+          data-theme={isDark ? "dark" : "light"}
+          data-bg={bg}
+          style={customStyle}
+        >
+          <Navbar
+            isDark={isDark}
+            onToggleDark={() => setIsDark((d) => !d)}
+            bg={bg}
+            onChangeBg={setBg}
+            onUploadBg={handleUploadBg}
+            isLoggedIn={isLoggedIn}
+            onLogout={handleLogout}
+          />
+          
+          <Board />
+        </div>
+      </TasksProvider>
     );
   }
 
   // ----------------------------------------------------
-  // 2. AUTHENTICATION VIEW
+  // 2. AUTHENTICATION VIEW (Your exact clean original layout)
   // ----------------------------------------------------
   return (
     <div className="auth-split-wrapper">
@@ -119,6 +140,20 @@ export default function App() {
         ) : (
           <RegisterForm onSwitchToLogin={() => setCurrentView("login")} />
         )}
+        
+        {/* Floating Return Button to get back to the dashboard safely */}
+        <button 
+          onClick={() => setCurrentView("dashboard")} 
+          className="btn-ghost-nav"
+          style={{ 
+            marginTop: "24px", 
+            color: "#5b21b6", 
+            borderColor: "#c4b5fd",
+            cursor: "pointer"
+          }}
+        >
+          ← Back to Board
+        </button>
       </main>
     </div>
   );
