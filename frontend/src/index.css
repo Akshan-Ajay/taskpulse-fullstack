@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---------- Design tokens ---------- */
+/* Colors below were sampled directly from the Create Task / Task Detail
+   screenshots (lavender page bg, white cards, #8B52C3-ish purple accent)
+   since the App.css that was shared didn't include a :root token block —
+   it only had leftover Vite starter styles (.hero, .ticks, #next-steps),
+   no color variables were actually defined there. If there's a separate
+   theme/variables file in the repo, send that over and these get swapped in 1:1. */
+:root {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  /* Light theme — matches the screenshots */
+  --bg: #F4EBFE;
+  --bg-2: #FBF5FF;
+  --surface: #FFFFFF;
+  --surface-2: #F3ECFC;
+  --text: #2E1657;
+  --text-muted: #7A6E96;
+  --border: #E7DCFB;
+  --accent: #8B52C3;
+  --accent-2: #6D4AEB;
+  --accent-soft: #F1E6FF;
+  --danger: #E4574C;
+  --warning: #E8A33D;
+  --success: #2FAE7A;
+  --info: #3F8CD9;
+  --shadow: 0 1px 2px rgba(46, 22, 87, 0.06), 0 10px 24px -14px rgba(46, 22, 87, 0.22);
+  --topbar: #2E1657;
+  --topbar-text: #F4EBFE;
+}
+
+[data-theme='dark'] {
+  --bg: #170D28;
+  --bg-2: #1B0F30;
+  --surface: #221436;
+  --surface-2: #2B1A44;
+  --text: #F1E9FF;
+  --text-muted: #A798C4;
+  --border: #3B2559;
+  --accent: #A472DE;
+  --accent-soft: #2E1D49;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px -14px rgba(0, 0, 0, 0.55);
+  --topbar: #241246;
+  --topbar-text: #F1E9FF;
+}
+
+/* ---------- Page background variants ---------- */
+/* Every variant is sized to wash across the whole viewport, not just
+   sit as a small accent in one corner. */
+[data-bg='solid']  .app-shell { background: var(--bg); }
+
+[data-bg='aurora'] .app-shell {
+  background:
+    radial-gradient(90% 75% at 15% -10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 65%),
+    radial-gradient(85% 70% at 105% 15%, color-mix(in srgb, var(--warning) 18%, transparent), transparent 65%),
+    radial-gradient(80% 65% at 0% 105%, color-mix(in srgb, var(--success) 14%, transparent), transparent 65%),
+    linear-gradient(160deg, var(--bg), var(--bg-2));
+  background-attachment: fixed;
+}
+
+[data-bg='dots'] .app-shell {
+  background-color: var(--bg);
+  background-image: radial-gradient(color-mix(in srgb, var(--text) 14%, transparent) 1.4px, transparent 1.4px);
+  background-size: 22px 22px;
+  background-attachment: fixed;
+}
+
+[data-bg='mesh'] .app-shell { background: var(--bg); position: relative; }
+[data-bg='mesh'] .app-shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(55% 45% at 12% 12%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 68%),
+    radial-gradient(48% 40% at 88% 8%, color-mix(in srgb, var(--info) 20%, transparent), transparent 68%),
+    radial-gradient(52% 45% at 78% 90%, color-mix(in srgb, var(--success) 16%, transparent), transparent 68%),
+    radial-gradient(45% 40% at 8% 88%, color-mix(in srgb, var(--warning) 14%, transparent), transparent 68%);
+  filter: blur(60px);
+}
+
+/* Custom uploaded photo — falls back to solid until an image is picked */
+[data-bg='custom'] .app-shell { background: var(--bg); }
+
+/* ---------- Reset ---------- */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font-family: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.35s ease;
+}
