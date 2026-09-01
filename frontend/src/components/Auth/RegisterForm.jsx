@@ -33,10 +33,11 @@ export default function RegisterForm({ onSwitchToLogin }) {
 
     // 3. Password complexity validation
     // Requires: >=8 chars, 1 uppercase, 1 lowercase, 1 special character
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
     if (!passwordRegex.test(password)) {
       setError(
-        "Password must be at least 8 characters long and include an uppercase letter, lowercase letter, and special character."
+        "Password must be at least 8 characters long and include an uppercase letter, lowercase letter, and special character.",
       );
       return;
     }
@@ -51,7 +52,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
       setError("");
       setLoading(true);
 
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch("http://localhost:5001/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -68,7 +69,9 @@ export default function RegisterForm({ onSwitchToLogin }) {
       onSwitchToLogin();
     } catch (err) {
       console.error("Registration request error:", err);
-      setError("Cannot connect to backend server. Make sure http://localhost:5000 is running.");
+      setError(
+        "Cannot connect to backend server. Make sure http://localhost:5001 is running.",
+      );
     } finally {
       setLoading(false);
     }
@@ -77,7 +80,14 @@ export default function RegisterForm({ onSwitchToLogin }) {
   return (
     <div className="auth-card">
       <h2>Create Your Account</h2>
-      {error && <p className="error-message" style={{ color: "#ef4444", marginBottom: "1rem" }}>{error}</p>}
+      {error && (
+        <p
+          className="error-message"
+          style={{ color: "#ef4444", marginBottom: "1rem" }}
+        >
+          {error}
+        </p>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Username</label>

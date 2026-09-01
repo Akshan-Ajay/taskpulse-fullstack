@@ -64,7 +64,10 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess }) {
     <div className="auth-card">
       <h2>Welcome to TaskPulse</h2>
       {error && (
-        <p className="error-message" style={{ color: "#ef4444", marginBottom: "1rem" }}>
+        <p
+          className="error-message"
+          style={{ color: "#ef4444", marginBottom: "1rem" }}
+        >
           {error}
         </p>
       )}
