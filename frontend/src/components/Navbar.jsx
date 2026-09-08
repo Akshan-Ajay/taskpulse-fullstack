@@ -12,6 +12,7 @@ import {
   LayoutGrid,
   Tag as TagIcon,
   CheckSquare,
+  Trash2,
 } from "lucide-react";
 import { boards as mockBoards, boardMembers, priorityColor, allTags } from "../data/mockData";
 import { useTasks } from "../context/TasksContext";
@@ -36,6 +37,8 @@ export default function Navbar({
   onUploadBg,
   isLoggedIn,
   onLogout,
+  onNavigateLogin,
+  onNavigateRegister,
 }) {
   const taskContext = useTasks() || {};
   const tasks = taskContext.tasks || [];
@@ -229,15 +232,27 @@ export default function Navbar({
         {isDark ? <Sun size={16} /> : <Moon size={16} />}
       </button>
 
-      {/* Conditional Interface Engine - Login/Register vs Logout Switch */}
+      {/* Auth Control Buttons */}
       {isLoggedIn ? (
         <button className="btn-ghost-nav" onClick={onLogout}>
           Logout
         </button>
       ) : (
         <>
-          <button className="btn-ghost-nav">Login</button>
-          <button className="btn-primary">Register</button>
+          <button
+            className="btn-ghost-nav"
+            data-auth-action="login"
+            onClick={onNavigateLogin}
+          >
+            Login
+          </button>
+          <button
+            className="btn-primary"
+            data-auth-action="register"
+            onClick={onNavigateRegister}
+          >
+            Register
+          </button>
         </>
       )}
     </header>
@@ -247,9 +262,9 @@ export default function Navbar({
 /* ---------------- Calendar panel ---------------- */
 
 function CalendarPanel({ tasks }) {
-  const monthDate = new Date("2026-08-01T00:00:00");
-  const year = monthDate.getFullYear();
-  const month = monthDate.getMonth();
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstWeekday = new Date(year, month, 1).getDay();
 
@@ -271,7 +286,7 @@ function CalendarPanel({ tasks }) {
 
   return (
     <div className="nav-panel calendar-panel">
-      <h4>{monthDate.toLocaleDateString(undefined, { month: "long", year: "numeric" })}</h4>
+      <h4>{today.toLocaleDateString(undefined, { month: "long", year: "numeric" })}</h4>
       <div className="calendar-grid calendar-weekdays">
         {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
           <span key={i}>{d}</span>

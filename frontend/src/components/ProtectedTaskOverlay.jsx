@@ -5,7 +5,15 @@ export default function ProtectedTaskOverlay({ initialView, taskData, onClose, i
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [promptMessage, setPromptMessage] = useState("");
 
-  // Determine if the form should be hidden completely
+  // Automatically reset auth prompts as soon as the user logs in successfully
+  useEffect(() => {
+    if (isLoggedIn) {
+      setShowAuthPrompt(false);
+      setPromptMessage("");
+    }
+  }, [isLoggedIn]);
+
+  // Determine if the creation view should be blocked for unauthenticated users
   const isCreateBlocked = !isLoggedIn && initialView === "create-task";
   const shouldHideForm = !isLoggedIn && (isCreateBlocked || showAuthPrompt);
 
@@ -58,7 +66,7 @@ export default function ProtectedTaskOverlay({ initialView, taskData, onClose, i
 
   return (
     <>
-      {/* 1. Force-hide TaskOverlayApp when a guest triggers restricted actions */}
+      {/* 1. Render TaskOverlayApp; display block when logged in or allowed */}
       <div style={{ display: shouldHideForm ? "none" : "block" }}>
         <TaskOverlayApp
           initialView={initialView}
@@ -68,7 +76,7 @@ export default function ProtectedTaskOverlay({ initialView, taskData, onClose, i
         />
       </div>
 
-      {/* 2. Show ONLY the Auth Modal for restricted actions */}
+      {/* 2. Show ONLY the Auth Modal for restricted actions when not logged in */}
       {shouldHideForm && (
         <AuthPromptModal
           onClose={onClose}
@@ -85,27 +93,32 @@ export default function ProtectedTaskOverlay({ initialView, taskData, onClose, i
 }
 
 export function AuthPromptModal({ onClose, title, message }) {
-  // Directly closes the overlay back to dashboard
   const handleGoBack = () => {
     onClose();
   };
 
   const handleOpenAuth = (type) => {
-    // Close overlay completely to reveal dashboard
     onClose();
 
-    // Trigger Navbar action
     setTimeout(() => {
       const navButtons = Array.from(
         document.querySelectorAll("nav button, header button, .navbar button")
       );
-      const targetBtn = navButtons.find((b) => b.textContent?.trim() === type);
+      
+      // Match by text or data-auth-action attribute
+      const targetBtn = navButtons.find((b) => {
+        const text = b.textContent?.trim().toLowerCase();
+        const action = b.getAttribute("data-auth-action");
+        return text === type.toLowerCase() || action === type.toLowerCase();
+      });
 
       if (targetBtn) {
         targetBtn.click();
       } else {
         const allButtons = Array.from(document.querySelectorAll("button"));
-        const fallbackBtn = allButtons.find((b) => b.textContent?.trim() === type);
+        const fallbackBtn = allButtons.find(
+          (b) => b.textContent?.trim().toLowerCase() === type.toLowerCase()
+        );
         if (fallbackBtn) fallbackBtn.click();
       }
     }, 50);

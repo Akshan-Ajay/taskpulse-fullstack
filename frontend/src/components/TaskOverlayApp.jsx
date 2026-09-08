@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { viewEvents } from "../eventRouter";
 import { useTasks } from "../context/TasksContext";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+
 const AVAILABLE_TAGS = ["Frontend", "Backend", "Design", "Bug", "API", "Docs", "Database"];
 
 const TAG_COLORS = {
@@ -125,7 +127,7 @@ export default function TaskOverlayApp({ initialView, taskData, onClose }) {
       if (AddNewTask) {
         await AddNewTask(payload);
       } else {
-        const res = await fetch("http://localhost:5001/api/tasks", {
+        const res = await fetch(`${API_BASE_URL}/tasks`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -167,7 +169,7 @@ export default function TaskOverlayApp({ initialView, taskData, onClose }) {
       if (updateTask && taskId) {
         await updateTask(taskId, payload);
       } else if (taskId) {
-        await fetch(`http://localhost:5001/api/tasks/${taskId}`, {
+        await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -197,7 +199,7 @@ export default function TaskOverlayApp({ initialView, taskData, onClose }) {
       if (deleteTask) {
         await deleteTask(taskId);
       } else {
-        await fetch(`http://localhost:5001/api/tasks/${taskId}`, { method: "DELETE" });
+        await fetch(`${API_BASE_URL}/tasks/${taskId}`, { method: "DELETE" });
       }
       handleClose();
     } catch (err) {
@@ -696,7 +698,7 @@ const styles = {
   },
   buttonContainer: {
     display: "flex",
-    justifyContent: "flex-end",
+    justify: "flex-end",
     gap: "12px",
     marginTop: "10px",
   },

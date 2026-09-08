@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API from "../../api"; // Adjust relative path if api.js is located in frontend/src/
 
 export default function RegisterForm({ onSwitchToLogin }) {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
       return;
     }
 
-    // 2. Email validation (checks for '@' and valid domain structure)
+    // 2. Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address (e.g., user@example.com).");
@@ -32,12 +33,11 @@ export default function RegisterForm({ onSwitchToLogin }) {
     }
 
     // 3. Password complexity validation
-    // Requires: >=8 chars, 1 uppercase, 1 lowercase, 1 special character
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
     if (!passwordRegex.test(password)) {
       setError(
-        "Password must be at least 8 characters long and include an uppercase letter, lowercase letter, and special character.",
+        "Password must be at least 8 characters long and include an uppercase letter, lowercase letter, and special character."
       );
       return;
     }
@@ -52,25 +52,19 @@ export default function RegisterForm({ onSwitchToLogin }) {
       setError("");
       setLoading(true);
 
-      const response = await fetch("http://localhost:5001/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
+      // Replaced native fetch with dynamic Axios instance
+      await API.post("/auth/register", {
+        username,
+        email,
+        password,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Registration failed.");
-        return;
-      }
 
       alert("Account created! Please log in.");
       onSwitchToLogin();
     } catch (err) {
       console.error("Registration request error:", err);
       setError(
-        "Cannot connect to backend server. Make sure http://localhost:5001 is running.",
+        err.response?.data?.message || "Unable to connect to backend server."
       );
     } finally {
       setLoading(false);

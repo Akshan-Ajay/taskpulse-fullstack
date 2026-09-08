@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Board from "./components/Board";
 import LoginForm from "./components/Auth/LoginForm";
 import RegisterForm from "./components/Auth/RegisterForm";
-import ProtectedTaskOverlay from "./components/ProtectedTaskOverlay"; // Swapped import
+import ProtectedTaskOverlay from "./components/ProtectedTaskOverlay";
 import { viewEvents } from "./eventRouter";
 import { TasksProvider } from "./context/TasksContext";
 import logoImg from "./assets/logo.png";
@@ -11,6 +11,14 @@ import logoImg from "./assets/logo.png";
 // Import original working stylesheets
 import "./components/Auth/Auth.css";
 import "./App.css";
+
+const getStorageItem = (key, fallback) => {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 export default function App() {
   // Navigation State: 'dashboard', 'login', or 'register'
@@ -23,13 +31,13 @@ export default function App() {
 
   // Shell themes & background preferences
   const [isDark, setIsDark] = useState(
-    () => localStorage.getItem("taskpulse-theme") === "dark"
+    () => getStorageItem("taskpulse-theme", "light") === "dark"
   );
   const [bg, setBg] = useState(
-    () => localStorage.getItem("taskpulse-bg") || "aurora"
+    () => getStorageItem("taskpulse-bg", "aurora")
   );
   const [customBgUrl, setCustomBgUrl] = useState(
-    () => localStorage.getItem("taskpulse-bg-custom") || null
+    () => getStorageItem("taskpulse-bg-custom", null)
   );
 
   // --- LISTEN FOR VIEW EVENTS FROM eventRouter ---
@@ -50,14 +58,14 @@ export default function App() {
   // --- GLOBAL CLICK INTERCEPTOR FOR DYNAMIC NAVBAR INTERFACES ---
   useEffect(() => {
     function handleGlobalClick(e) {
-      const target = e.target.closest("button");
+      const target = e.target.closest("button[data-auth-action]");
       if (!target) return;
 
-      const buttonText = target.textContent?.trim();
-      if (buttonText === "Login") {
+      const action = target.getAttribute("data-auth-action");
+      if (action === "login") {
         e.preventDefault();
         setCurrentView("login");
-      } else if (buttonText === "Register") {
+      } else if (action === "register") {
         e.preventDefault();
         setCurrentView("register");
       }
@@ -68,11 +76,19 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("taskpulse-theme", isDark ? "dark" : "light");
+    try {
+      localStorage.setItem("taskpulse-theme", isDark ? "dark" : "light");
+    } catch (e) {
+      console.warn("Storage permission denied:", e);
+    }
   }, [isDark]);
 
   useEffect(() => {
-    localStorage.setItem("taskpulse-bg", bg);
+    try {
+      localStorage.setItem("taskpulse-bg", bg);
+    } catch (e) {
+      console.warn("Storage permission denied:", e);
+    }
   }, [bg]);
 
   const handleLoginSuccess = (userData) => {
@@ -93,7 +109,7 @@ export default function App() {
     try {
       localStorage.setItem("taskpulse-bg-custom", dataUrl);
     } catch {
-      // image too large for localStorage
+      // Image size exceeds localStorage limit
     }
   }
 
@@ -128,6 +144,8 @@ export default function App() {
             onUploadBg={handleUploadBg}
             isLoggedIn={isLoggedIn}
             onLogout={handleLogout}
+            onNavigateLogin={() => setCurrentView("login")}
+            onNavigateRegister={() => setCurrentView("register")}
           />
 
           <Board

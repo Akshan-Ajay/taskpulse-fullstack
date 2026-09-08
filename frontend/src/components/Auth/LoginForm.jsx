@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API from "../../api"; // Adjust relative path if api.js is in frontend/src/
 
 export default function LoginForm({ onSwitchToRegister, onLoginSuccess }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -29,21 +30,13 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess }) {
       setError("");
       setLoading(true);
 
-      const response = await fetch("http://localhost:5001/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+      // Replaced fetch with dynamic Axios instance
+      const response = await API.post("/auth/login", {
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Invalid credentials.");
-        return;
-      }
+      const data = response.data;
 
       // Save JWT token in browser storage
       if (data.token) {
@@ -54,7 +47,9 @@ export default function LoginForm({ onSwitchToRegister, onLoginSuccess }) {
       if (onLoginSuccess) onLoginSuccess(data.user);
     } catch (err) {
       console.error("Login request error:", err);
-      setError("Unable to connect to backend server.");
+      setError(
+        err.response?.data?.message || "Unable to connect to backend server."
+      );
     } finally {
       setLoading(false);
     }
