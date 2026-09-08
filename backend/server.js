@@ -11,7 +11,6 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/taskpulse';
 
-// Updated CORS setup to handle deployment origin
 app.use(cors({
   origin: process.env.CLIENT_URL || '*',
   credentials: true
@@ -19,26 +18,45 @@ app.use(cors({
 
 app.use(express.json());
 
+// Database connection middleware for Vercel serverless functions
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected && mongoose.connection.readyState === 1) return;
+  try {
+    const db = await mongoose.connect(MONGO_URI);
+    isConnected = db.connections[0].readyState === 1;
+    console.log('✓ Connected to MongoDB successfully');
+  } catch (err) {
+    console.error('❌ MongoDB Connection Error:', err.message);
+    throw err;
+  }
+};
+
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ message: "Database connection failed", error: err.message });
+  }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
-app.get('/', (req, res) => {
-  res.send('TaskPulse API is running...');
+// Health check endpoint for /api
+app.get('/api', (req, res) => {
+  res.json({ message: 'TaskPulse API is running...' });
 });
 
-// Connect to MongoDB without blocking serverless execution
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log('✓ Connected to MongoDB successfully');
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB Connection Error:', err.message);
-  });
+app.get('/', (req, res) => {
+  res.send('TaskPulse Root API');
+});
 
-// Only listen on PORT when running locally
-if (process.env.NODE_ENV !== 'production') {
+// Only listen locally
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`🚀 TaskPulse Server is actively listening on port ${PORT}`);
   });
