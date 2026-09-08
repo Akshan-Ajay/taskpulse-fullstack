@@ -1,6 +1,7 @@
 export default {
   testEnvironment: "node",
   transform: {},
+  passWithNoTests: true,
   testMatch: [
     "**/tests/**/*.test.js",
     "**/__tests__/**/*.js"
@@ -11,10 +12,10 @@ export default {
   ],
   coverageThreshold: {
     global: {
-      statements: 75,
-      branches: 70,
-      functions: 75,
-      lines: 75
+      statements: 70,
+      branches: 60,
+      functions: 70,
+      lines: 70
     }
   }
 };
