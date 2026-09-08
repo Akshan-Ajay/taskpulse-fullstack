@@ -1,7 +1,10 @@
 export default {
   testEnvironment: "node",
   transform: {},
-  testMatch: ["**/tests/**/*.test.js"],
+  testMatch: [
+    "**/tests/**/*.test.js",
+    "**/__tests__/**/*.js"
+  ],
   collectCoverageFrom: [
     "routes/authRoutes.js",
     "models/User.js"
