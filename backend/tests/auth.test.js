@@ -4,23 +4,14 @@ import app from '../server.js';
 import { connectTestDb, clearTestDb, closeTestDb } from './setup/db.js';
 
 describe('POST /api/auth/register & login', () => {
-  beforeAll(async () => {
-    await connectTestDb();
-  });
-
-  afterAll(async () => {
-    await closeTestDb();
-  });
-
-  beforeEach(async () => {
-    await clearTestDb();
-  });
+  beforeAll(async () => await connectTestDb());
+  afterAll(async () => await closeTestDb());
+  beforeEach(async () => await clearTestDb());
 
   it('returns 400 when fields are missing', async () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send({ email: 'user@nsbm.lk' });
-
     expect(res.status).toBe(400);
   });
 
@@ -32,7 +23,6 @@ describe('POST /api/auth/register & login', () => {
         email: 'user@nsbm.lk',
         password: '123'
       });
-
     expect(res.status).toBe(400);
   });
 
@@ -44,7 +34,6 @@ describe('POST /api/auth/register & login', () => {
         email: 'user@nsbm.lk',
         password: 'Password123!'
       });
-
     expect([200, 201]).toContain(res.status);
   });
 
@@ -63,7 +52,6 @@ describe('POST /api/auth/register & login', () => {
         email: 'user@nsbm.lk',
         password: 'WrongPassword!'
       });
-
     expect(res.status).toBe(401);
   });
 
