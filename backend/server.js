@@ -27,14 +27,21 @@ app.get('/', (req, res) => {
   res.send('TaskPulse API is running...');
 });
 
+// Connect to MongoDB without blocking serverless execution
 mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log('✓ Connected to MongoDB successfully');
-    app.listen(PORT, () => {
-      console.log(`🚀 TaskPulse Server is actively listening on port ${PORT}`);
-    });
   })
   .catch((err) => {
     console.error('❌ MongoDB Connection Error:', err.message);
   });
+
+// Only listen on PORT when running locally
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 TaskPulse Server is actively listening on port ${PORT}`);
+  });
+}
+
+export default app;
