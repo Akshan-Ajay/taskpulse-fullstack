@@ -4,7 +4,11 @@ export default {
   passWithNoTests: true,
   testMatch: [
     "**/tests/**/*.test.js",
-    "**/__tests__/**/*.js"
+    "**/__tests__/**/*.test.js"
+  ],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/tests/setup/"
   ],
   collectCoverageFrom: [
     "routes/authRoutes.js",
